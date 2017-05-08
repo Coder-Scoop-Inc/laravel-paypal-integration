@@ -1,0 +1,17 @@
+{
+    "name": "coderscoopinc/laravelpaypal",
+    "description": "Coder Scoop Laravel Paypal integration",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "GuinivereJane",
+            "email": "guinifer.k@gmail.com"
+        }
+    ],
+  
+    "minimum-stability": "dev",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0",
+        "phpunit/phpunit": "4.8.*"
+    }
+}
