@@ -38,8 +38,5 @@ class TransactionTest extends PHPUnit_Framework_TestCase
 	       $this->assertNotFalse($this->transaction->accessKey());
     }
 		
-		/** @test */ 
-    public function a_transactoin_has_an_array_of_products(){
-
-    }
+		
 }
