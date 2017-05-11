@@ -21,7 +21,7 @@ class paymentTest extends PHPUnit_Framework_TestCase
 
 	/** @test */ 
 	public function a_payment_has_sales_data(){
-		$this->assertTrue(is_string($this->payment->salesData()));
+		$this->assertTrue(is_string($this->payment->data()));
 	}
 
 

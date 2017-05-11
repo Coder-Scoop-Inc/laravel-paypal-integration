@@ -1,9 +1,12 @@
 <?php
 
 include './src/Transaction.php';
+//include './src/Payment.php';
 
 use PHPUnit\Framework\TestCase;
 use \Coderscoopinc\Laravelpaypal\Transaction;
+use \Coderscoopinc\Laravelpaypal\Payment;
+
 
 class TransactionTest extends PHPUnit_Framework_TestCase
 {
@@ -11,6 +14,7 @@ class TransactionTest extends PHPUnit_Framework_TestCase
 		protected $transaction;
 		protected $sandbox_client_id;
 		protected $sandbox_client_secret;
+		protected $payment;
 
 		public function setup(){
 		
@@ -19,6 +23,14 @@ class TransactionTest extends PHPUnit_Framework_TestCase
 			$this->sandbox_client_secret = "EN5l7_20o2Ug5jQp2dr3Xa7EMttYiU-g4v1vF-Ld1ybDaS1SPCJ2BWKLWBw-6tFjJ3A81euLHK0zYJcr";
 
 			$this->transaction = new Transaction($this->sandbox_client_id,$this->sandbox_client_secret);
+		//	$this->payment = new Payment();
+
+			//$this->transaction->payment($this->payment);
+		}
+
+		/** @test */ 
+		public function a_transaction_had_a_payment_object(){
+			$this->assertNotNull($this->transaction->payment());
 		}
 
 				/** @test */ 

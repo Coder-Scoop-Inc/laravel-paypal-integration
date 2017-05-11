@@ -15,16 +15,21 @@ class Transaction
 	protected $client_secret;
 
 	protected $client;
+	protected $payment;
 
-	protected $products;
+	protected $paypalPaymentUrl = 'https://api.sandbox.paypal.com/v1/payments/payment';
 
 	public function __construct($client_id,$client_secret){
 
 		$this->client_id = $client_id;
 		$this->client_secret = $client_secret;
 		$this->accessKey = $this->getAccessKey();
+		$this->payment = new Payment;
 
+	}
 
+	public function payment($payment){
+		$this->payment = $payment;
 	}
 
 
@@ -50,9 +55,29 @@ class Transaction
 
 	}
 
+	public function createPayment(){
+		 try {
+            $client = new Client();
+            $paymentResponse = $client->request('POST', $this->paypalPaymentUrl, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->accessKey,
+                ],
+                'body' => $this->payment->data()
+            ]);
+
+            $paymentBody = json_decode($paymentResponse->getBody()->getContents());
+            var_dump($paymentBody);
+        } catch (\Exception $ex) {
+            $error =  json_encode($ex->getMessage());
+            var_dump($error);
+        }
+	}
+
 	public function accessKeyHeaders(){
 		return $this->accessKeyHeaders;
 	}
+	
 
 	public function client_id(){
 		return $this->client_id;
@@ -71,3 +96,26 @@ class Transaction
 	}
     
 }
+
+
+// curl -v https://api.sandbox.paypal.com/v1/payments/payment \
+//   -H "Content-Type: application/json" \
+//   -H "Authorization: Bearer A21AAHlaWxVgMB5bB3nwYFtchIMFVGXOPYGuZza_u9FZ6rRIkp36ztnZCSUulONLR5kR-Ao-4l97ChClLu4LqupckEKwKPp6g-Token" \
+//   -d '{
+//   "intent":"sale",
+//   "redirect_urls":{
+//     "return_url":"http://example.com/your_redirect_url.html",
+//     "cancel_url":"http://example.com/your_cancel_url.html"
+//   },
+//   "payer":{
+//     "payment_method":"paypal"
+//   },
+//   "transactions":[
+//     {
+//       "amount":{
+//         "total":"7.47",
+//         "currency":"USD"
+//       }
+//     }
+//   ]
+// }'
