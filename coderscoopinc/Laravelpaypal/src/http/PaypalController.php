@@ -13,6 +13,6 @@ class PaypalController extends Controller{
 						        'Accept-Languge' => 'en_US']
 						       ]);
 		$transaction = new Transaction(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'));
-		$transaction->createPayment();
+		return json_encode($transaction->createPayment());
 	}
 }

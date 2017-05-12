@@ -3,79 +3,29 @@
 //  data and methods needed for this can be written here
 
 namespace Coderscoopinc\Laravelpaypal;
+
 use GuzzleHttp\Client;
+use \Coderscoopinc\Laravelpaypal\Payment;
 
 
 class Transaction 
 {
 
-	protected $accessKey;
 
-	protected $client_id;
-	protected $client_secret;
-
+	
 	protected $client;
-	protected $payment;
+	protected $payment = null;
 
-	protected $paypalPaymentUrl = 'https://api.sandbox.paypal.com/v1/payments/payment';
 
 	public function __construct($client_id,$client_secret){
-
-		$this->client_id = $client_id;
-		$this->client_secret = $client_secret;
-		$this->accessKey = $this->getAccessKey();
-		$this->payment = new Payment;
+		$this->payment = new Payment($this->client_id, $this->client_secret);
 
 	}
 
-	public function payment($payment){
-		$this->payment = $payment;
-	}
+	
 
-
-	private function getAccessKey(){
-		try{
-			$client = new Client();
-
-
-			$uri = 'https://' . $this->client_id . ':' . $this->client_secret . '@'.'api.sandbox.paypal.com/v1/oauth2/token';
-
-			$res = $client->request('POST', $uri,
-																['Accept' => 'application/json',
-                									'Accept-Language' => 'en_US',
-													   		 'form_params' => [
-        																						'grant_type' => 'client_credentials',
-																									],
-																]);
-			$responseBody = json_decode($res->getBody()->getContents());
-		}catch (\Exception $ex) {
-             $error = $ex->getMessage();
-    }
-    return isset($error) ? false:$responseBody->access_token;
-
-	}
-
-	public function createPayment(){
-		 try {
-            $client = new Client();
-            $paymentResponse = $client->request('POST', $this->paypalPaymentUrl, [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->accessKey,
-                ],
-                'body' => $this->payment->data()
-            ]);
-
-            $paymentBody = json_decode($paymentResponse->getBody()->getContents());
-            var_dump($paymentBody);
-        } catch (\Exception $ex) {
-            $error =  json_encode($ex->getMessage());
-            var_dump($error);
-        }
-	}
-
-	public function accessKeyHeaders(){
-		return $this->accessKeyHeaders;
+	public function payment(){
+		return $this->payment;
 	}
 	
 
@@ -91,9 +41,7 @@ class Transaction
 		return $this->client;
 	}
 
-	public function accessKey(){
-		return $this->accessKey;
-	}
+
     
 }
 

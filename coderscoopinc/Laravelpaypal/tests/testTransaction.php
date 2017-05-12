@@ -27,9 +27,9 @@ class TransactionTest extends PHPUnit_Framework_TestCase
 
 			//$this->transaction->payment($this->payment);
 		}
-
+		
 		/** @test */ 
-		public function a_transaction_had_a_payment_object(){
+		public function a_transaction_has_a_payment_object(){
 			$this->assertNotNull($this->transaction->payment());
 		}
 
@@ -38,17 +38,9 @@ class TransactionTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue(is_string($this->transaction->client_secret()));
 		}
 
-		/** @test */ 
-		public function a_transaction_has_a_guzzle_client()
-    {
-	       !($this->assertNull($this->transaction->client()));
-    }
 	
-		/** @test */ 
-    public function a_transaction_has_an_access_token()
-    {
-	       $this->assertNotFalse($this->transaction->accessKey());
-    }
+	
+
 		
 		
 }
