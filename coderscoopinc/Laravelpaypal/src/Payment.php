@@ -14,22 +14,43 @@ class Payment
 	protected $salesData;
   protected $paypalPaymentUrl = 'https://api.sandbox.paypal.com/v1/payments/payment';
   protected $accessKey;
+
+  protected $approval_url = null;
+  protected $execute_url = null;
+  protected $self_url = null;
+
+  //PAY- id of the payment from paypal
+  protected $paypal_id = null;
+
+  //payer_id is the id returned from paypal identifying the payer/method paying
+  protected $payer_id = null;
+
+
+  //you need ot provide a return 
+  protected $return_url = null;
  
-  protected $client_id;
-  protected $client_secret;
+  protected $client_id = null;
+  protected $client_secret= null;
 
   protected $paymentBody;
 
-  public function __construct($client_id,$client_secret){
-		$returnUrl ="";
+ 
+
+  public function __construct($client_id,$client_secret,$return_url = null){
 		$cancelUrl ="";
-		$amountToBePaid ="2";
+    $amountToBePaid ="2";
+
+    $this->return_url=$return_url;
+
+    $this->client_id = $client_id;
+    $this->client_secret = $client_secret;
     $this->getAccessKey();
 
-		$this->salesData = '{
+		$this->salesData = 
+            '{
               "intent":"sale",
               "redirect_urls":{
-                "return_url":"http://example.com/your_redirect_url.html",
+                "return_url":"' . $return_url . '",
                 "cancel_url":"http://example.com/your_cancel_url.html"
               },
               "payer":{
@@ -44,21 +65,30 @@ class Payment
                 }
               ]
             }';
-	}
+          }
 
   public function accessKey(){
     return $this->accessKey;
   }
-  
+
+  public function returnUrl(){
+    return $this->returnUrl;
+  }
+
+  public function approval_url(){
+    return $this->approval_url;
+  }
+
   public function paymentBody(){
     return $this->paymentBody();
   }
 
-  public function data(){
+  public function salesData(){
     return $this->salesData;
   }
   
   private function getAccessKey(){
+   
     try{
       $client = new Client();
       $uri = 'https://' . $this->client_id . ':' . $this->client_secret . '@'.'api.sandbox.paypal.com/v1/oauth2/token';
@@ -86,17 +116,102 @@ class Payment
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->accessKey,
                 ],
-                'body' => $this->salesData()
+                'body' => $this->salesData
             ]);
 
             $this->paymentBody = json_decode($paymentResponse->getBody()->getContents());
+            $this->paypal_id = $this->paymentBody->id;
+            //get the paypal process links from the response
+            foreach ($this->paymentBody->links as $link){
+              //this is the link for the payer top approve the payment
+              if ($link->rel == "approval_url"){
+                $this->approval_url = $link->href;
+              }
+              if ($link->rel == "execute"){
+                $this->execute_url = $link->href;
+              }
+              if ($link->rel == "self"){
+                $this->self_url = $link->href;
+              }
+            }
+       
         } catch (\Exception $ex) {
             $error =  json_encode($ex->getMessage());
             var_dump($error);
         }
+             echo($this->payer_id);
+
+  }
+
+  private function parsePaymentBody($paymentResponse){
+     $this->paymentBody = json_decode($paymentResponse->getBody()->getContents());
+           
+            $this->paypal_id = $this->paymentBody->id;
+            //get the paypal process links from the response
+            foreach ($this->paymentBody->links as $link){
+              //this is the link for the payer top approve the payment
+              if ($link->rel == "approval_url"){
+                $this->approval_url = $link->href;
+              }
+              if ($link->rel == "execute"){
+                $this->execute_url = $link->href;
+              }
+              if ($link->rel == "self"){
+                $this->self_url = $link->href;
+              }
+
+            }
+            if ($this->paymentBody->payer->payer_info->payer_id){
+              $this->payer_id = $this->paymentBody->payer->payer_info->payer_id;
+            }
+       
+  }
+
+  public function paymentInfo($id){
+      $client = new Client();
+      $paymentInfo = $client->request('GET', "https://api.sandbox.paypal.com/v1/payments/payment/" . $id , [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessKey,
+                    'Content-Type' => 'application/json',
+                ]
+                
+            ]);
+    $this->parsePaymentBody($paymentInfo);
+      return $this->paymentBody;
+  } 
+
+  public function execute(){
+          echo("I AM HERE");
+
+    $body = '{"payer_id":"' . $this->payer_id . '"}';
+    $client = new Client();
+    try{
+      $exePayment = $client->request('POST', $this->execute_url, ['headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->accessKey,
+                ],
+                'body' => $body
+            ]);
+      echo("I AM HERE");
+      var_dump($exePayment);
+    }
+    catch (\Exception $ex) {
+        $error =  json_encode($ex->getMessage());
+              echo("I AM HERE");
+
+        var_dump($error);
+    }
+
+
   }
 
 }
 
 
+// curl -v https://api.sandbox.paypal.com/v1/payments/payment/PAY-3GB39755DK182031DLELBN7Q/execute/ \\
+//   -H "Content-Type:application/json" \\
+//   -H "Authorization: Bearer Access-Token" \\
+//   -d '{
+//   "payer_id": "payer_id"
+// }'
 
