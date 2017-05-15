@@ -25,7 +25,6 @@ class Payment
   //payer_id is the id returned from paypal identifying the payer/method paying
   protected $payer_id = null;
 
-
   //you need ot provide a return 
   protected $return_url = null;
  
@@ -37,8 +36,7 @@ class Payment
  
 
   public function __construct($client_id,$client_secret,$return_url = null){
-		$cancelUrl ="";
-    $amountToBePaid ="2";
+		
 
     $this->return_url=$return_url;
 
@@ -59,9 +57,32 @@ class Payment
               "transactions":[
                 {
                   "amount":{
-                    "total":"7.47",
+                    "total":"18",
                     "currency":"USD"
+                  },
+              "item_list": {
+                "items": [
+                  {
+                  "name": "hat",
+                  "description": "Brown hat.",
+                  "quantity": "1",
+                  "price": "3",
+                  "tax": "0.0",
+                  "sku": "1",
+                  "currency": "USD"
+                  },
+                  {
+                  "name": "handbag",
+                  "description": "Black handbag.",
+                  "quantity": "1",
+                  "price": "15",
+                  "tax": "0.0",
+                  "sku": "product34",
+                  "currency": "USD"
                   }
+                ]
+                
+                }
                 }
               ]
             }';
@@ -139,7 +160,7 @@ class Payment
             $error =  json_encode($ex->getMessage());
             var_dump($error);
         }
-             echo($this->payer_id);
+             return $this->paymentBody->id;
 
   }
 
@@ -161,7 +182,7 @@ class Payment
               }
 
             }
-            if ($this->paymentBody->payer->payer_info->payer_id){
+            if (isset($this->paymentBody->payer->payer_info->payer_id)){
               $this->payer_id = $this->paymentBody->payer->payer_info->payer_id;
             }
        
@@ -181,7 +202,6 @@ class Payment
   } 
 
   public function execute(){
-          echo("I AM HERE");
 
     $body = '{"payer_id":"' . $this->payer_id . '"}';
     $client = new Client();
@@ -192,16 +212,12 @@ class Payment
                 ],
                 'body' => $body
             ]);
-      echo("I AM HERE");
-      var_dump($exePayment);
     }
     catch (\Exception $ex) {
         $error =  json_encode($ex->getMessage());
-              echo("I AM HERE");
-
         var_dump($error);
     }
-
+    return $exePayment->getBody();
 
   }
 

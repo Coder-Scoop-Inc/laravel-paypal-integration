@@ -18,7 +18,8 @@ class PaypalController extends Controller{
 						        'Accept-Languge' => 'en_US']
 						       ]);
 		$payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'),$return_url);
-		$payment->createPaypalPayment();
+		$payment_id = $payment->createPaypalPayment();
+		return json_encode(array('payment_id' => $payment_id, 'approval_url' => $payment->approval_url()));
 		//return redirect($payment->approval_url());
 ;
 	}
@@ -26,8 +27,8 @@ class PaypalController extends Controller{
 	public function confirmpayment($id){
 		$payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'));
 		$payment->paymentInfo($id);
-		echo("controller");
-		$payment->execute();
+		return $payment->execute();
+
 	}
 
 	public function paymentinfo($id){

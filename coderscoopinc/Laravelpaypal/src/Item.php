@@ -8,7 +8,7 @@ namespace Coderscoopinc\Laravelpaypal;
 class Item
 {
 
- 			protected $name;
+ 	protected $name;
       protected $description;
       protected $quantity;
       protected $price;
