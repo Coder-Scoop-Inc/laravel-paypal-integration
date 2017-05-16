@@ -11,7 +11,7 @@ class Payment
 
 
 
-	protected $salesData;
+	protected $salesData = null;
   protected $paypalPaymentUrl = 'https://api.sandbox.paypal.com/v1/payments/payment';
   protected $accessKey;
 
@@ -35,58 +35,17 @@ class Payment
 
  
 
-  public function __construct($client_id,$client_secret,$return_url = null){
+  public function __construct($client_id,$client_secret,$salesData = null){
 		
 
-    $this->return_url=$return_url;
 
     $this->client_id = $client_id;
     $this->client_secret = $client_secret;
     $this->getAccessKey();
 
-		$this->salesData = 
-            '{
-              "intent":"sale",
-              "redirect_urls":{
-                "return_url":"' . $return_url . '",
-                "cancel_url":"http://example.com/your_cancel_url.html"
-              },
-              "payer":{
-                "payment_method":"paypal"
-              },
-              "transactions":[
-                {
-                  "amount":{
-                    "total":"18",
-                    "currency":"USD"
-                  },
-              "item_list": {
-                "items": [
-                  {
-                  "name": "hat",
-                  "description": "Brown hat.",
-                  "quantity": "1",
-                  "price": "3",
-                  "tax": "0.0",
-                  "sku": "1",
-                  "currency": "USD"
-                  },
-                  {
-                  "name": "handbag",
-                  "description": "Black handbag.",
-                  "quantity": "1",
-                  "price": "15",
-                  "tax": "0.0",
-                  "sku": "product34",
-                  "currency": "USD"
-                  }
-                ]
-                
-                }
-                }
-              ]
-            }';
-          }
+		$this->salesData = $salesData;
+           
+  }
 
   public function accessKey(){
     return $this->accessKey;
@@ -130,6 +89,7 @@ class Payment
 
 
   public function createPaypalPayment(){
+
      try {
             $client = new Client();
             $paymentResponse = $client->request('POST', $this->paypalPaymentUrl, [
@@ -137,7 +97,7 @@ class Payment
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->accessKey,
                 ],
-                'body' => $this->salesData
+                'body' => $this->salesData->toJson()
             ]);
 
             $this->paymentBody = json_decode($paymentResponse->getBody()->getContents());
