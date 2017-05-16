@@ -10,3 +10,11 @@ This package is adds sevearl url end points to your project that make using the 
 
 ### USAGE
 This paackage will add the following routes to your project
+
+## /paypaldemo - GET 
+
+## /paypal/payment - POST 
+
+## /paypal/confirm/{id} - GET
+
+## /paypal/info/{id} -GET
