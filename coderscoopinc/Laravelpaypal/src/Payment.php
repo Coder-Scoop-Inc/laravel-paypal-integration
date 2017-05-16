@@ -5,6 +5,14 @@
 namespace Coderscoopinc\Laravelpaypal;
 
 use GuzzleHttp\Client;
+/**
+ * Payment object interacts with Payment API to open, approve and confirm payment
+ *
+ * Additionally this objet can request payment info from paypal.  As long as you store 
+ * 
+ * 
+ * 
+ */
 
 class Payment
 {
@@ -33,11 +41,17 @@ class Payment
 
   protected $paymentBody;
 
- 
+  /**
+   * payment constructor, 
+   *
+   * client_id and client_secret are from paypal and must be stored in your projects .env file * for security 
+   * reasons, salesData should be past from controller, if it is not, then it needs to be added via
+   * addItem method
+   * 
+   */
 
   public function __construct($client_id,$client_secret,$salesData = null){
 		
-
 
     $this->client_id = $client_id;
     $this->client_secret = $client_secret;
@@ -67,6 +81,14 @@ class Payment
     return $this->salesData;
   }
   
+  /**
+   * uses cleint id and client secret to get access token from paypal
+   *
+   * 
+   * 
+   * @return sets object access token, is needed for all API transactions
+   * 
+   */
   private function getAccessKey(){
    
     try{
@@ -87,9 +109,16 @@ class Payment
     }
   }
 
+/**
+ * creates paypal payment object 
+ *
+ * this method creats the paypal payment object
+ * 
 
+ * @return JSON object with payment id, a unique id for use with paypal REST API
+ * 
+ */
   public function createPaypalPayment(){
-
      try {
             $client = new Client();
             $paymentResponse = $client->request('POST', $this->paypalPaymentUrl, [
@@ -97,24 +126,9 @@ class Payment
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->accessKey,
                 ],
-                'body' => $this->salesData->toJson()
+                'body' => $this->salesData->salesData()
             ]);
-
-            $this->paymentBody = json_decode($paymentResponse->getBody()->getContents());
-            $this->paypal_id = $this->paymentBody->id;
-            //get the paypal process links from the response
-            foreach ($this->paymentBody->links as $link){
-              //this is the link for the payer top approve the payment
-              if ($link->rel == "approval_url"){
-                $this->approval_url = $link->href;
-              }
-              if ($link->rel == "execute"){
-                $this->execute_url = $link->href;
-              }
-              if ($link->rel == "self"){
-                $this->self_url = $link->href;
-              }
-            }
+           $this->parsePaymentBody($paymentResponse);
        
         } catch (\Exception $ex) {
             $error =  json_encode($ex->getMessage());
@@ -123,6 +137,12 @@ class Payment
              return $this->paymentBody->id;
 
   }
+
+/**
+ * utiliy method, sets object properties based on returned  paypal info
+ * 
+ * 
+ */
 
   private function parsePaymentBody($paymentResponse){
      $this->paymentBody = json_decode($paymentResponse->getBody()->getContents());
@@ -147,7 +167,15 @@ class Payment
             }
        
   }
-
+  /**
+   *gets payment info from paypal
+   *
+   * can be used at anytime after a payment has been created. 
+   * 
+   * @param payment Id
+   * @return JSON object with current payment info and status.
+   * 
+   */
   public function paymentInfo($id){
       $client = new Client();
       $paymentInfo = $client->request('GET', "https://api.sandbox.paypal.com/v1/payments/payment/" . $id , [
@@ -160,6 +188,16 @@ class Payment
     $this->parsePaymentBody($paymentInfo);
       return $this->paymentBody;
   } 
+
+   /**
+   *excutes a payment
+   *
+   * call this after a user has approved a payment (you can check this in info) to finalize the sale
+   * 
+   * @return JSON object with current payment info and status.  Will fail if the payment has not been apprved 
+   * yet
+   * 
+   */
 
   public function execute(){
 
@@ -183,11 +221,4 @@ class Payment
 
 }
 
-
-// curl -v https://api.sandbox.paypal.com/v1/payments/payment/PAY-3GB39755DK182031DLELBN7Q/execute/ \\
-//   -H "Content-Type:application/json" \\
-//   -H "Authorization: Bearer Access-Token" \\
-//   -d '{
-//   "payer_id": "payer_id"
-// }'
 

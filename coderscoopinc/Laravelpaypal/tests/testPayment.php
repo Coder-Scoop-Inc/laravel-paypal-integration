@@ -31,10 +31,6 @@ class paymentTest extends PHPUnit_Framework_TestCase
 		$this->assertNotNull($this->payment);
 	}
 
-	/** @test */ 
-	public function a_payment_has_sales_data(){
-		$this->assertTrue(is_string($this->payment->salesData()));
-	}
 
 	public function a_payment_can_create_a_paypal_payment(){
 			$this->payment->createPaypalPayment();

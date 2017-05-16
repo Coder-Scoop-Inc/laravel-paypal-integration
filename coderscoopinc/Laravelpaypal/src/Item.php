@@ -4,7 +4,11 @@
 
 
 namespace Coderscoopinc\Laravelpaypal;
-
+/**
+ * Item classes are each line item in a sale,
+ * 
+ * @param name, description, quanitty, price, tax, sku and currency all as strings
+ */
 class Item
 {
 
@@ -28,7 +32,22 @@ class Item
 
       }
 
-   
+      public function cost(){
+       return (string)$this->price * (1 + $this->tax) * $this->quantity;
+      }
+      
+      public function currency(){
+            return $this->currency;
+      }
+
+      /**
+       * returns a sting with item data, used to build salesData
+       *
+       * sales data can contain many of items
+       * 
+       * @return JSON object with payment info from paypal
+       * 
+       */
 
       public function toJson(){
             return json_encode(array("name" =>$this->name,
