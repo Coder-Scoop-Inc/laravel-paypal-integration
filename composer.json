@@ -1,5 +1,5 @@
 {
-    "name": "Guiniverejane/laravelpaypal",
+    "name": "coderscoop/laravelpaypal",
     "description": "Coder Scoop Laravel Paypal integration - a sugar over the paypal API",
     "license": "MIT",
     "authors": [
