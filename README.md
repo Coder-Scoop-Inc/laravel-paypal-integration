@@ -90,8 +90,11 @@ POST
 RETURN 
 *{"payment_id":"PAY-9JC48149SV546373BLENZEAY","approval_url":"https:\/\/www.sandbox.paypal.com\/cgi-bin\/webscr?cmd=_express-checkout&token=EC-68K84205DL435322P"}*
 
+##### IMPORTANT NOTE : you must redirect your user to the approval link that this route returns, that is how they will log into paypal and approve the payment so you can get your money !!!
+
 An alternative to posting a JSON object to this route is to build your object programtically using the Item and SalesData objects in the package. This is also a straight forward process and will be explained later in this document.
 
 #### paypal/confirm/{id} - GET
+once a 
 
 #### paypal/info/{id} -GET
