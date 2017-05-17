@@ -19,6 +19,7 @@ This route allows you to test your credentials and post a sample payment; you ca
 
 Post a fully formed paypal payment object such as the following (more examples and information on these objects can be found at https://developer.paypal.com/docs/api/payments/) to this route.  It will return to you the paypal id for this transaction and the url you need to redirect your user to in order to approve the payment.
 
+POST
 *{
   "intent": "sale",
   "payer": {
@@ -85,6 +86,9 @@ Post a fully formed paypal payment object such as the following (more examples a
   "cancel_url": "http://www.paypal.com/cancel"
   }
 }*
+
+RETURN 
+*{"payment_id":"PAY-9JC48149SV546373BLENZEAY","approval_url":"https:\/\/www.sandbox.paypal.com\/cgi-bin\/webscr?cmd=_express-checkout&token=EC-68K84205DL435322P"}*
 
 An alternative to posting a JSON object to this route is to build your object programtically using the Item and SalesData objects in the package. This is also a straight forward process and will be explained later in this document.
 
