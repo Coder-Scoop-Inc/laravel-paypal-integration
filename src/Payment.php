@@ -2,7 +2,7 @@
 // this model is a payment, it will be used by the transaction model 
 
 
-namespace Coderscoopinc\Laravelpaypal;
+namespace Coderscoop\Laravelpaypal;
 
 use GuzzleHttp\Client;
 /**

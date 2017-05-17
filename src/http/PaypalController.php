@@ -1,14 +1,14 @@
 <?php
 
-namespace Coderscoopinc\Laravelpaypal\Http;
+namespace Coderscoop\Laravelpaypal\Http;
 
 
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-use Coderscoopinc\Laravelpaypal\Payment;
-use Coderscoopinc\Laravelpaypal\SalesData;
-use Coderscoopinc\Laravelpaypal\Item;
+use Coderscoop\Laravelpaypal\Payment;
+use Coderscoop\Laravelpaypal\SalesData;
+use Coderscoop\Laravelpaypal\Item;
 
 /**
 * PaypalController is the controll object for payments etc.

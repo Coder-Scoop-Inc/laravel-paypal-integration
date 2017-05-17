@@ -1,6 +1,6 @@
 <?php
 
-namespace Coderscoopinc\Laravelpaypal;
+namespace Coderscoop\Laravelpaypal;
 
 use Illuminate\Support\ServiceProvider;
 

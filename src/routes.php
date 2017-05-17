@@ -1,8 +1,8 @@
 <?php
 
-Route::get('paypal/demo', "Coderscoopinc\Laravelpaypal\Http\PaypalController@index");
+Route::get('paypal/demo', "Coderscoop\Laravelpaypal\Http\PaypalController@index");
 
-Route::get('paypal/confirm/{id}', "Coderscoopinc\Laravelpaypal\Http\PaypalController@confirmpayment");
-Route::get('paypal/info/{id}', "Coderscoopinc\Laravelpaypal\Http\PaypalController@paymentInfo");
-Route::post('paypal/payment', "Coderscoopinc\Laravelpaypal\Http\PaypalController@paymentWithSalesData");
+Route::get('paypal/confirm/{id}', "Coderscoop\Laravelpaypal\Http\PaypalController@confirmpayment");
+Route::get('paypal/info/{id}', "Coderscoop\Laravelpaypal\Http\PaypalController@paymentInfo");
+Route::post('paypal/payment', "Coderscoop\Laravelpaypal\Http\PaypalController@paymentWithSalesData");
 

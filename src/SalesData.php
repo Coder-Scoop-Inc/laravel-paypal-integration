@@ -1,7 +1,7 @@
 <?php
 
-namespace Coderscoopinc\Laravelpaypal;
-use Coderscoopinc\Laravelpaypal\Item;
+namespace Coderscoop\Laravelpaypal;
+use Coderscoop\Laravelpaypal\Item;
 
 
 class SalesData

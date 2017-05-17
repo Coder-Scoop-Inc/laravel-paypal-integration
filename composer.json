@@ -8,11 +8,15 @@
             "email": "guinifer.k@gmail.com"
         }
     ],
-  
+    "minimum-stability": "dev",
     "require": {
         "php": "^7.0",
         "guzzlehttp/guzzle": "~6.0"
-            }
+            },
+    "autoload": {
+        "psr-4": {
+            "coderscoop\\laravelpaypal\\": "src/"
+        }
+    },
 }
-
 

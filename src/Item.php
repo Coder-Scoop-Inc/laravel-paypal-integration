@@ -3,7 +3,7 @@
 //currently a place holder to remind me to refactor a payment to have many items
 
 
-namespace Coderscoopinc\Laravelpaypal;
+namespace Coderscoop\Laravelpaypal;
 /**
  * Item classes are each line item in a sale,
  * 
