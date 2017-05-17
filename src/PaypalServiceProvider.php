@@ -29,5 +29,8 @@ class PaypalServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    $this->app->bind('PaypalController', function($app){
+        return new PaypalController();
+    });
     }
 }
