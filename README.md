@@ -17,7 +17,7 @@ This route allows you to test your credentials and post a sample payment; you ca
 
 #### paypal/payment - POST 
 
-Post a fully formed paypal payment object such as the following (more examples and information on these objects can be found at https://developer.paypal.com/docs/api/payments/) to this route.  It will return to you the paypal id for this transaction and the url you need to redirect your user to in order to approve the payment 
+Post a fully formed paypal payment object such as the following (more examples and information on these objects can be found at https://developer.paypal.com/docs/api/payments/) to this route.  It will return to you the paypal id for this transaction and the url you need to redirect your user to in order to approve the payment.
 
 *{
   "intent": "sale",
@@ -85,6 +85,8 @@ Post a fully formed paypal payment object such as the following (more examples a
   "cancel_url": "http://www.paypal.com/cancel"
   }
 }*
+
+An alternative to posting a JSON object to this route is to build your object programtically using the Item and SalesData objects in the package. This is also a straight forward process and will be explained later in this document.
 
 #### paypal/confirm/{id} - GET
 
