@@ -8,12 +8,10 @@
             "email": "guinifer.k@gmail.com"
         }
     ],
-  
-    "minimum-stability": "stable",
+   
     "require": {
         "php": "^7.0",
         "guzzlehttp/guzzle": "~6.0",
-        "phpunit/phpunit": "4.8.*"
     }
 }
 
