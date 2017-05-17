@@ -1,7 +1,7 @@
 # laravel-paypal-integration
 Developer Guin Kellam  
 
-## THIS IS STILL IN PROGRESS - IT WILL BE READY FOR USE SHORTLY
+## THIS DOCUMENT IS STILL IN PROGRESS - IT WILL BE READY FOR USE SHORTLY
 
 Paypal Payment API - Laravel integration
 
