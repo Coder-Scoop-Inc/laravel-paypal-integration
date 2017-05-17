@@ -92,9 +92,12 @@ RETURN
 
 ##### IMPORTANT NOTE : you must redirect your user to the approval link that this route returns, that is how they will log into paypal and approve the payment so you can get your money !!!
 
+##### IMPORTANT NOTE 2 : make sure you save the payment id somewhere, this is how you will identify and interact with this payment in the next steps !
+
 An alternative to posting a JSON object to this route is to build your object programtically using the Item and SalesData objects in the package. This is also a straight forward process and will be explained later in this document.
 
-#### paypal/confirm/{id} - GET
-once a 
-
 #### paypal/info/{id} -GET
+Anytime afer a payment has been create you can use this route to get it's current status and 
+#### paypal/confirm/{id} - GET
+once a payment has been approved by the 
+
