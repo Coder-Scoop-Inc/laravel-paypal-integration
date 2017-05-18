@@ -7,7 +7,7 @@
 ### DESCRIPTION
 This package adds sevearl url end points to your project that make using the Paypal API signfiganly easier.  You will still need a paypal vendor account, and make sure you are using https, you know, for reasons.  
 
-When you initiante a payment with the Paypal Payment API, a Payment object is created on their servers.  You then use there various REST end points to interact with the object throught the payment process.  This package simplifies this interaction for you. 
+When you initiate a payment with the Paypal Payment API, a Payment object is created on their servers.  You then use there various REST end points to interact with the object throught the payment process.  This package simplifies this interaction for you. 
 
 ### INSTALLATION
 
