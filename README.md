@@ -1,4 +1,4 @@
-#Paypal Payment API - Laravel integration
+# Paypal Payment API - Laravel integration
 
 Developer Guin Kellam  
 
@@ -11,7 +11,8 @@ When you initiante a payment with the Paypal Payment API, a Payment object is cr
 
 ### INSTALLATION
 
-composer require "coderscoop/laravelpaypal:*"
+  1. composer require "coderscoop/laravelpaypal:*"
+  2. Add coderscoop\laravelpaypal\PaypalServiceProvider::class to your service provider in config/app
 
 ### USAGE
 This paackage will add the following routes to your project
