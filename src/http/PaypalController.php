@@ -37,10 +37,6 @@ class PaypalController extends Controller{
 		$salesData->addItem($item1);
 		$salesData->addItem($item2);
 
-		$headers =  json_encode(['headers' => [
-						        'Accept' => 'application/json',
-						        'Accept-Languge' => 'en_US']
-						       ]);
 		$payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'),$salesData);
 	
 		$payment_id = $payment->createPaypalPayment();

@@ -119,5 +119,34 @@ Once a payment has been approved by the payer (using the approval url returned w
 RETURN
 This will return a JSON object with the payment info if the payment has been apporved by the user, and if not, it will return a validation error.  A possible site flow would be to send this route as your return url to the paypal/payment POST route, so that when your application successfully returns from a the paypal site you automatically process the payments.  If you don't want to do this, you can check /paypal/info at anytime to see if the payment was approved, and then process it at your leisure.
 
+#### Using the Item and Sales data models to build your payment
+As an alternative to building your own payment JSON object and sending it with the paypal/payment POST route I have provided another method that you can use inside your own models.
 
+There is an Item object, which is single line item from your sale and a a SalesData object, which hold the items and generates the JSON that will be sent to the paypal REST API.  Once you have built your SaleData you create a new Payment object with it, and then call the 'createPaypalPayment' method on it.  This submits your SalesData object and returns the same information that the paypal/payment POST route would (payment_id and approval_url).
+
+##### Useful Methods
+ Item Contstructor Item("name", "description", "quantity" , "price" , "tax" , "sku", "currency" )  NOTE:all of these values must be strings !!)
+ 
+ SalesData->addItem(Item); 
+
+ Payment Constructor Payment('CLIENT_ID', 'CLIENT_SECRET', SalesData)  NOTE: Client id and Client Secret are the ones provided by paypal through your developer account, I hope you have these set in your .env file !!  Do not expose theses to the world!!!)
+
+Example
+
+    *$item1 = new Item("Thing1","This is thing 1","1","2","0.0","1","CAD");
+    $item2 = new Item("Thing2","This is thing 2","1","2","0.0","1","CAD");
+
+    $salesData = new SalesData();
+    $salesData->addItem($item1);
+    $salesData->addItem($item2);
+
+    $payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'),$salesData);
+  
+    $payment_id = $payment->createPaypalPayment();*
+
+To Do
+  More tests !
+  More graceful error handling
+  Add /paypal/cancel 
+  Implement other REST fucntions (Set up reoccuring payments, invoicing, etc)
 
