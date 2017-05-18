@@ -1,6 +1,6 @@
 # Paypal Payment API - Laravel integration
 
-Developer Guin Kellam  
+#### Developer: Guin Kellam  
 
 
 
