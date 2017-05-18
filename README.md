@@ -133,7 +133,7 @@ There is an Item object, which is single line item from your sale and a a SalesD
 
 Example
 
-    *$item1 = new Item("Thing1","This is thing 1","1","2","0.0","1","CAD");
+    $item1 = new Item("Thing1","This is thing 1","1","2","0.0","1","CAD");
     $item2 = new Item("Thing2","This is thing 2","1","2","0.0","1","CAD");
 
     $salesData = new SalesData();
@@ -142,11 +142,11 @@ Example
 
     $payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'),$salesData);
   
-    $payment_id = $payment->createPaypalPayment();*
+    $payment_id = $payment->createPaypalPayment();
 
 To Do
-  -More tests !
-  -More graceful error handling
-  -Add /paypal/cancel 
-  -Implement other REST fucntions (Set up reoccuring payments, invoicing, etc)
+  *More tests !
+  *More graceful error handling
+  *Add /paypal/cancel 
+  *Implement other REST fucntions (Set up reoccuring payments, invoicing, etc)
 
