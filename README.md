@@ -145,6 +145,7 @@ Example
     $payment_id = $payment->createPaypalPayment();
 
 To Do
+
   *More tests !
   *More graceful error handling
   *Add /paypal/cancel 
