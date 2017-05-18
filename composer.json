@@ -1,6 +1,6 @@
 {
     "name": "coderscoop/laravelpaypal",
-    "description": "Coder Scoop Laravel Paypal integration - a sugar over the paypal API",
+    "description": "Coder Scoop Laravel Paypal integration - A simplified way to interact with the Paypal REST API",
     "license": "MIT",
     "authors": [
         {
