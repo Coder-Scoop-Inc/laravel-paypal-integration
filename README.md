@@ -1,14 +1,17 @@
-# laravel-paypal-integration
+#Paypal Payment API - Laravel integration
+
 Developer Guin Kellam  
 
-## THIS DOCUMENT IS STILL IN PROGRESS - IT WILL BE READY FOR USE SHORTLY
 
-Paypal Payment API - Laravel integration
 
 ### DESCRIPTION
 This package adds sevearl url end points to your project that make using the Paypal API signfiganly easier.  You will still need a paypal vendor account, and make sure you are using https, you know, for reasons.  
 
 When you initiante a payment with the Paypal Payment API, a Payment object is created on their servers.  You then use there various REST end points to interact with the object throught the payment process.  This package simplifies this interaction for you. 
+
+### INSTALLATION
+
+composer require "coderscoop/laravelpaypal:*"
 
 ### USAGE
 This paackage will add the following routes to your project
@@ -151,6 +154,6 @@ To Do
   More graceful error handling
 
   Add /paypal/cancel 
-  
+
   Implement other REST fucntions (Set up reoccuring payments, invoicing, etc)
 
