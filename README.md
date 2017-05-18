@@ -146,8 +146,11 @@ Example
 
 To Do
 
-  *More tests !
-  *More graceful error handling
-  *Add /paypal/cancel 
-  *Implement other REST fucntions (Set up reoccuring payments, invoicing, etc)
+  More tests !
+
+  More graceful error handling
+
+  Add /paypal/cancel 
+  
+  Implement other REST fucntions (Set up reoccuring payments, invoicing, etc)
 
