@@ -2,12 +2,10 @@
 
 #### Developer: Guin Kellam  
 
-
-
 ### DESCRIPTION
-This package adds several url end points to your project that make using the Paypal API significantly easier.  You will still need a paypal vendor account, and make sure you are using https when you are submitting things (for your own safety)
+This package adds several url end points to your project that make using the Paypal API significantly easier.  You will still need a Paypal vendor account, and make sure you are using https when you are submitting things (for your own safety)
 
-When you initiate a payment with the Paypal Payment API, a Payment object is created on their servers.  This package simplifies the process of accepting payments from your users by making calls that interact with the various REST end that Paypal provides. 
+When you initiate a payment with the Paypal Payment API, a Payment object is created on their servers.  This package simplifies the process of accepting payments from your users by making calls that interact with the various REST end points that Paypal provides. 
 
 ### INSTALLATION
 
@@ -15,7 +13,7 @@ When you initiate a payment with the Paypal Payment API, a Payment object is cre
   2. Add coderscoop\laravelpaypal\PaypalServiceProvider::class to your service provider in config/app
 
 ### USAGE
-This paackage will add the following routes to your project
+This package will add the following routes to your project
 
 #### paypal/demo - GET 
 
@@ -96,13 +94,13 @@ POST
 RETURN 
 *{"payment_id":"PAY-9JC48149SV546373BLENZEAY","approval_url":"https:\/\/www.sandbox.paypal.com\/cgi-bin\/webscr?cmd=_express-checkout&token=EC-68K84205DL435322P"}*
 
-##### IMPORTANT NOTE : you must redirect your user to the approval link that this route returns, that is how they will log into paypal and approve the payment so you can get your money !!!
+##### IMPORTANT NOTE : you must redirect your user to the approval link that this route returns, that is how they will log into Paypal and approve the payment so you can get your money !!!
 
 ##### IMPORTANT NOTE 2 : make sure you save the payment id somewhere, this is how you will identify and interact with this payment in the next steps !
 
 ##### LESS IMPORTANT BUT STILL KIND OF IMPORTANT NOTE : return_url and cancel_url are url's you provide, PayPal will redirect the user to these routes depending on the results of the approval process.  See more information about this in the instructions for the confirm route.
 
-An alternative to posting a JSON object to this route is to build your object programmatically using the Item and SalesData objects in the package. This is also a straight forward process and will be explained later in this document.
+An alternative to posting a JSON object to this route is to build your object programmatically using the Item and SalesData objects in the package. This is also a straightforward process and will be explained later in this document.
 
 #### paypal/info/{id} -GET
 
@@ -150,14 +148,14 @@ Example
   
     $payment_id = $payment->createPaypalPayment();
 
-To Do
+####TO DO:
 
-  More tests !
+  * More tests !
 
-  More graceful error handling
+  * More graceful error handling
 
-  Add /paypal/cancel 
+  * Add /paypal/cancel 
 
-  Implement other REST functions (Set up reoccurring payments, invoicing, etc)
+  * Implement other REST functions (Set up reoccurring payments, invoicing, etc)
 
 
