@@ -5,9 +5,9 @@
 
 
 ### DESCRIPTION
-This package adds sevearl url end points to your project that make using the Paypal API signfiganly easier.  You will still need a paypal vendor account, and make sure you are using https, you know, for reasons.  
+This package adds several url end points to your project that make using the Paypal API significantly easier.  You will still need a paypal vendor account, and make sure you are using https when you are submitting things (for your own safety)
 
-When you initiate a payment with the Paypal Payment API, a Payment object is created on their servers.  You then use there various REST end points to interact with the object throught the payment process.  This package simplifies this interaction for you. 
+When you initiate a payment with the Paypal Payment API, a Payment object is created on their servers.  This package simplifies the process of accepting payments from your users by making calls that interact with the various REST end that Paypal provides. 
 
 ### INSTALLATION
 
@@ -19,7 +19,7 @@ This paackage will add the following routes to your project
 
 #### paypal/demo - GET 
 
-This route allows you to test your credentials and post a sample payment; you can play with the endpoints and not have to worry about building up the JSON for a payment. Otherwise it behaves exactly like paypal/payment, and returns a data object of the same structure.
+This route allows you to test your credentials and post a sample payment; It will return a payment_id and approval_url  that you can use  to test the endpoints and not have to worry about building up the JSON for a payment
 
 #### paypal/payment - POST 
 
@@ -100,19 +100,18 @@ RETURN
 
 ##### IMPORTANT NOTE 2 : make sure you save the payment id somewhere, this is how you will identify and interact with this payment in the next steps !
 
-##### LESS IMPORTANT BUT STILL KIND OF IMPORTANT NOTE : return_url and cancel_url are url's you provide, pyapal will redirect the user to these routes depending on the results of the approval process.  See more information about this in the instructions for the confirm route.
+##### LESS IMPORTANT BUT STILL KIND OF IMPORTANT NOTE : return_url and cancel_url are url's you provide, PayPal will redirect the user to these routes depending on the results of the approval process.  See more information about this in the instructions for the confirm route.
 
-
-An alternative to posting a JSON object to this route is to build your object programtically using the Item and SalesData objects in the package. This is also a straight forward process and will be explained later in this document.
+An alternative to posting a JSON object to this route is to build your object programmatically using the Item and SalesData objects in the package. This is also a straight forward process and will be explained later in this document.
 
 #### paypal/info/{id} -GET
 
-Anytime afer a payment has been created you can use this route to get it's current status and information.  Paypal also tracks lineitems, notes, etc, all of this is avaialble from this route. 
+Anytime after a payment has been created you can use this route to get it's current status and information.  PayPal also tracks lineitems, notes, etc, all of this is available from this route. 
 
 Send a get requests to this route, {id} is the payment_id that was returned when you created the payment with the paypal/payment route from this package.  
 
 RETURN
-A JSON object simialar to the one below, it will look different depending on the status of the payment you quieried
+A JSON object similar to the one below, it will look different depending on the status of the payment you queried
 *{"id":"PAY-5S991868XB086112JLEO2BJY","intent":"sale","state":"created","cart":"3T903907ND8538129","payer":{"payment_method":"paypal"},"transactions":[{"amount":{"total":"4.00","currency":"CAD"},"payee":{"merchant_id":"DTW9Z49SZHQTG","email":"guinifer.k-facilitator@gmail.com"},"item_list":{"items":[{"name":"Thing1","sku":"1","description":"This is thing 1","price":"2.00","currency":"CAD","tax":"0.00","quantity":1},{"name":"Thing1","sku":"1","description":"This is thing 1","price":"2.00","currency":"CAD","tax":"0.00","quantity":1}]},"related_resources":[]}],"redirect_urls":{"return_url":"example.com\/?paymentId=PAY-5S991868XB086112JLEO2BJY","cancel_url":"example.com"},"create_time":"2017-05-18T13:24:54Z","update_time":"2017-05-18T13:33:23Z","links":[{"href":"https:\/\/api.sandbox.paypal.com\/v1\/payments\/payment\/PAY-5S991868XB086112JLEO2BJY","rel":"self","method":"GET"},{"href":"https:\/\/api.sandbox.paypal.com\/v1\/payments\/payment\/PAY-5S991868XB086112JLEO2BJY\/execute","rel":"execute","method":"POST"},{"href":"https:\/\/www.sandbox.paypal.com\/cgi-bin\/webscr?cmd=_express-checkout&token=EC-3T903907ND8538129","rel":"approval_url","method":"REDIRECT"}]}*
 
 
@@ -121,23 +120,26 @@ A JSON object simialar to the one below, it will look different depending on the
 Once a payment has been approved by the payer (using the approval url returned when the payment was created... see the paypal/payment POST route if you have forgotten about this) You can use the payment_id and this route to finalize the payment. If you do not do this the payment will not be finalized and you will not get paid !
 
 RETURN
-This will return a JSON object with the payment info if the payment has been apporved by the user, and if not, it will return a validation error.  A possible site flow would be to send this route as your return url to the paypal/payment POST route, so that when your application successfully returns from a the paypal site you automatically process the payments.  If you don't want to do this, you can check /paypal/info at anytime to see if the payment was approved, and then process it at your leisure.
+This will return a JSON object with the payment info if the payment has been approved by the user, and if not, it will return a validation error.  A possible site flow would be to send this route as your return url to the paypal/payment POST route, so that when your application successfully returns from a the paypal site you automatically process the payments.  If you don't want to do this, you can check /paypal/info at anytime to see if the payment was approved, and then process it at your leisure.
 
 #### Using the Item and Sales data models to build your payment
 As an alternative to building your own payment JSON object and sending it with the paypal/payment POST route I have provided another method that you can use inside your own models.
 
-There is an Item object, which is single line item from your sale and a a SalesData object, which hold the items and generates the JSON that will be sent to the paypal REST API.  Once you have built your SaleData you create a new Payment object with it, and then call the 'createPaypalPayment' method on it.  This submits your SalesData object and returns the same information that the paypal/payment POST route would (payment_id and approval_url).
+The package provides an Item object, which is single line item from your sale and a SalesData object, which hold the items and generates the JSON that will be sent to the paypal REST API.  Once you have built your SaleData you create a new Payment object with it, and then call the 'createPaypalPayment' method on it.  This submits your SalesData object and returns the same information that the paypal/payment POST route would (payment_id and approval_url).
 
 ##### Useful Methods
  Item Contstructor Item("name", "description", "quantity" , "price" , "tax" , "sku", "currency" )  NOTE:all of these values must be strings !!)
  
  SalesData->addItem(Item); 
 
- Payment Constructor Payment('CLIENT_ID', 'CLIENT_SECRET', SalesData)  NOTE: Client id and Client Secret are the ones provided by paypal through your developer account, I hope you have these set in your .env file !!  Do not expose theses to the world!!!)
+ Payment Constructor Payment('CLIENT_ID', 'CLIENT_SECRET', SalesData)  NOTE: Client id and Client Secret are the ones provided by PayPal through your developer account, I hope you have these set in your .env file !!  Do not expose theses to the world!!!)
 
 Example
+    namespace coderscoop/laravelpaypal;
 
-    $item1 = new Item("Thing1","This is thing 1","1","2","0.0","1","CAD");
+   /……/
+
+    $item1 = new Item("Thing1","Thi  s is thing 1","1","2","0.0","1","CAD");
     $item2 = new Item("Thing2","This is thing 2","1","2","0.0","1","CAD");
 
     $salesData = new SalesData();
@@ -156,5 +158,6 @@ To Do
 
   Add /paypal/cancel 
 
-  Implement other REST fucntions (Set up reoccuring payments, invoicing, etc)
+  Implement other REST functions (Set up reoccurring payments, invoicing, etc)
+
 
