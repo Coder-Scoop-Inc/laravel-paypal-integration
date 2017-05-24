@@ -69,7 +69,6 @@ class SalesData
 	public function currency(){
 		if (count($this->itemList) > 0){
 			return $this->itemList[0]->currency();
-			return null;
 		}
 	}
 
@@ -81,7 +80,7 @@ class SalesData
    */
 	public function amountTotal(){
 		$callback = function($carry,$value){
-			return $carry += $value->cost();
+			return  0;//$carry += $value->cost();
 		};
 
 		if (count($this->itemList) > 0){

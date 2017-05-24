@@ -22,7 +22,7 @@ class Item
 
       public function __construct($name, $description, $quantity , $price , $tax , $sku , $currency )
       {
-	      $this->name =$name;
+	      $this->name = $name;
 	      $this->description = $description;
 	      $this->quantity = $quantity;
 	      $this->price = $price;

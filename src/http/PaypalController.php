@@ -37,12 +37,21 @@ class PaypalController extends Controller{
 		$salesData->addItem($item1);
 		$salesData->addItem($item2);
 
+		$headers =  json_encode(['headers' => [
+						        'Accept' => 'application/json',
+						        'Accept-Languge' => 'en_US']
+						       ]);
 		$payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'),$salesData);
 	
 		$payment_id = $payment->createPaypalPayment();
-		return json_encode(array('payment_id' => $payment_id, 'approval_url' => $payment->approval_url()));
+		if (substr($payment_id,0,3) == "PAY"){
+			return json_encode(array('payment_id' => $payment_id, 'approval_url' => $payment->approval_url()));
+		}else{
+			return json_encode(array('error' => $payment_id));
+		}
+
 		//return redirect($payment->approval_url());
-;
+
 	}
 
 	/**
@@ -66,8 +75,11 @@ class PaypalController extends Controller{
 						       ]);
 		$payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'),$salesData);
 		$payment_id = $payment->createPaypalPayment();
-		return json_encode(array('payment_id' => $payment_id, 'approval_url' => $payment->approval_url()));
-
+		if (substr($payment_id,0,3) == "PAY"){
+			return json_encode(array('payment_id' => $payment_id, 'approval_url' => $payment->approval_url()));
+		}else{
+			return json_encode(array('error' => $payment_id));
+		}
 	}
 
 	/**
@@ -86,7 +98,14 @@ class PaypalController extends Controller{
 	public function confirmpayment($id){
 		$payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'));
 		$payment->paymentInfo($id);
-		return $payment->execute();
+		$info =  $payment->execute();
+
+		if (isset($info->id)){
+			return (json_encode($info));
+		}else{
+			return json_encode(array('error' => $info));
+			 
+		}
 
 	}
 
@@ -104,7 +123,12 @@ class PaypalController extends Controller{
 
 	public function paymentinfo($id){
 		$payment = new Payment(env('PAYPAL_CLIENT_ID'), env('PAYPAL_CLIENT_SECRET'));
-		return json_encode($payment->paymentInfo($id));
+		$info = $payment->paymentInfo($id);
+		if (isset($info->id)){
+			return (json_encode($info));
+		}else{
+			return json_encode(array('error' => $info));
+		}
 
 	}
 }

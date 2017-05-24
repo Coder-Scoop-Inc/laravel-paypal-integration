@@ -18,6 +18,8 @@ class PaypalServiceProvider extends ServiceProvider
     {
         //
         include __DIR__.'/routes.php';
+        $this->loadViewsFrom(__DIR__.'/views', 'laravelpaypal');
+
 
     }
 

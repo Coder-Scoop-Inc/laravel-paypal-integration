@@ -115,7 +115,8 @@ class Payment
  * this method creats the paypal payment object
  * 
 
- * @return JSON object with payment id, a unique id for use with paypal REST API
+ * @return if successfuo JSON object with payment id, a unique id for use with paypal REST API
+ *        if failuer :string with error details
  * 
  */
   public function createPaypalPayment(){
@@ -131,8 +132,8 @@ class Payment
            $this->parsePaymentBody($paymentResponse);
        
         } catch (\Exception $ex) {
-            $error =  json_encode($ex->getMessage());
-            var_dump($error);
+            $error =  $ex->getMessage();
+            return $error;
         }
              return $this->paymentBody->id;
 
@@ -178,15 +179,21 @@ class Payment
    */
   public function paymentInfo($id){
       $client = new Client();
-      $paymentInfo = $client->request('GET', "https://api.sandbox.paypal.com/v1/payments/payment/" . $id , [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessKey,
-                    'Content-Type' => 'application/json',
-                ]
-                
-            ]);
-    $this->parsePaymentBody($paymentInfo);
-      return $this->paymentBody;
+      try{
+        $paymentInfo = $client->request('GET', "https://api.sandbox.paypal.com/v1/payments/payment/" . $id , [
+                  'headers' => [
+                      'Authorization' => 'Bearer ' . $this->accessKey,
+                      'Content-Type' => 'application/json',
+                  ]
+                  
+              ]);
+      }
+      catch(\Exception $ex) {
+         $error =  json_encode($ex->getMessage());
+        return($error);
+      }
+     $this->parsePaymentBody($paymentInfo);
+     return $this->paymentBody;
   } 
 
    /**
@@ -204,7 +211,7 @@ class Payment
     $body = '{"payer_id":"' . $this->payer_id . '"}';
     $client = new Client();
     try{
-      $exePayment = $client->request('POST', $this->execute_url, ['headers' => [
+      $paymentInfo = $client->request('POST', $this->execute_url, ['headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->accessKey,
                 ],
@@ -212,10 +219,11 @@ class Payment
             ]);
     }
     catch (\Exception $ex) {
-        $error =  json_encode($ex->getMessage());
-        var_dump($error);
+      $error =  json_encode($ex->getMessage());
+      return($error);
     }
-    return $exePayment->getBody();
+   $this->parsePaymentBody($paymentInfo);
+     return $this->paymentBody;
 
   }
 
