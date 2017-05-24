@@ -4,7 +4,6 @@ namespace Coderscoop\Laravelpaypal;
 
 use Illuminate\Support\ServiceProvider;
 
-require __DIR__ . '/../vendor/autoload.php';
 
 
 class PaypalServiceProvider extends ServiceProvider
